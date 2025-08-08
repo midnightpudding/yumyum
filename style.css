@@ -738,11 +738,6 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-/* Use Montserrat font family */
-* {
-    font-family: 'Montserrat', var(--font-family-base);
-}
-
 /* App Layout */
 .app {
     min-height: 100vh;
@@ -772,12 +767,6 @@ select.form-control {
     display: flex;
     align-items: center;
     gap: var(--space-12);
-}
-
-.logo {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-base);
 }
 
 .brand-name {
@@ -864,7 +853,7 @@ select.form-control {
 /* Nutrition Grid */
 .nutrition-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--space-24);
     margin-bottom: var(--space-32);
 }
@@ -873,7 +862,6 @@ select.form-control {
     background-color: var(--color-surface);
     border-radius: var(--radius-lg);
     padding: var(--space-24);
-    text-align: center;
     border: 1px solid var(--color-card-border);
     box-shadow: var(--shadow-sm);
     transition: transform var(--duration-fast) var(--ease-standard);
@@ -884,55 +872,75 @@ select.form-control {
     box-shadow: var(--shadow-md);
 }
 
-.nutrition-circle {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto var(--space-16);
+.nutrition-card h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    margin: 0 0 var(--space-16) 0;
 }
 
-.nutrition-circle svg {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-}
-
-.progress-circle {
-    transition: stroke-dashoffset 1s var(--ease-standard);
-}
-
-.nutrition-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+.nutrition-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-bottom: var(--space-16);
 }
 
 .nutrition-value {
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-text);
-    display: block;
 }
 
 .nutrition-unit {
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
-    display: block;
 }
 
 .nutrition-goal {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
-    display: block;
+    margin-left: auto;
 }
 
-.nutrition-card h3 {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text);
-    margin: 0;
+/* Progress Bars */
+.progress-bar-container {
+    width: 100%;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-secondary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width var(--duration-normal) var(--ease-standard);
+    border-radius: var(--radius-full);
+    width: 0%;
+}
+
+.calories-progress {
+    background-color: var(--color-teal-500);
+}
+
+.protein-progress {
+    background-color: var(--color-red-500);
+}
+
+.carbs-progress {
+    background-color: var(--color-orange-500);
+}
+
+.fat-progress {
+    background-color: var(--color-slate-500);
+}
+
+.fiber-progress {
+    background-color: #10B981;
 }
 
 /* Add Meal Section */
@@ -1237,17 +1245,8 @@ select.form-control {
     }
     
     .nutrition-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: var(--space-16);
-    }
-    
-    .nutrition-circle {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .nutrition-value {
-        font-size: var(--font-size-xl);
     }
     
     .meal-item {
@@ -1300,11 +1299,6 @@ select.form-control {
     
     .brand-name {
         font-size: var(--font-size-xl);
-    }
-    
-    .logo {
-        width: 32px;
-        height: 32px;
     }
 }
 

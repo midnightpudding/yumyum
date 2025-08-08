@@ -49,6 +49,17 @@ const SAMPLE_MEALS = [
         fat: 0,
         fiber: 0,
         date: "2025-08-07"
+    },
+    {
+        id: 4,
+        name: "Salmon with Rice",
+        type: "dinner",
+        calories: 520,
+        protein: 40,
+        carbs: 35,
+        fat: 22,
+        fiber: 3,
+        date: "2025-08-06"
     }
 ];
 
@@ -78,22 +89,27 @@ function stringToDate(dateStr) {
 
 // Data Management
 function initializeData() {
-    const savedMeals = localStorage.getItem('yumyum-meals');
-    if (savedMeals) {
-        try {
+    try {
+        const savedMeals = localStorage.getItem('yumyum-meals');
+        if (savedMeals) {
             meals = JSON.parse(savedMeals);
-        } catch (e) {
+        } else {
             meals = [...SAMPLE_MEALS];
             saveMeals();
         }
-    } else {
+    } catch (e) {
+        console.warn('Failed to parse saved meals, using sample data');
         meals = [...SAMPLE_MEALS];
         saveMeals();
     }
 }
 
 function saveMeals() {
-    localStorage.setItem('yumyum-meals', JSON.stringify(meals));
+    try {
+        localStorage.setItem('yumyum-meals', JSON.stringify(meals));
+    } catch (e) {
+        console.warn('Failed to save meals');
+    }
 }
 
 function getMealsForDate(date) {
@@ -133,33 +149,47 @@ function calculateDailyTotals(date) {
 
 // Navigation Functions
 function initializeNavigation() {
+    console.log('Initializing navigation...');
     const navTabs = document.querySelectorAll('.nav-tab');
     const tabContents = document.querySelectorAll('.tab-content');
 
-    navTabs.forEach(tab => {
+    console.log('Found nav tabs:', navTabs.length);
+    console.log('Found tab contents:', tabContents.length);
+
+    navTabs.forEach((tab, index) => {
+        console.log(`Setting up tab ${index}:`, tab.getAttribute('data-tab'));
+        
         tab.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
+            
             const targetTab = tab.getAttribute('data-tab');
+            console.log('Tab clicked:', targetTab);
             
-            console.log('Switching to tab:', targetTab);
-            
-            // Update active tab
+            // Remove active class from all tabs
             navTabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
             tab.classList.add('active');
             
-            // Update active content
+            // Remove active class from all content sections
             tabContents.forEach(content => {
                 content.classList.remove('active');
             });
             
+            // Show target content
             const targetContent = document.getElementById(targetTab);
             if (targetContent) {
                 targetContent.classList.add('active');
-            }
-            
-            // Initialize tab-specific content
-            if (targetTab === 'progress') {
-                setTimeout(updateProgressChart, 100);
+                console.log('Switched to tab:', targetTab);
+                
+                // Initialize tab-specific content
+                if (targetTab === 'progress') {
+                    setTimeout(() => {
+                        updateProgressChart();
+                    }, 100);
+                }
+            } else {
+                console.error('Target content not found:', targetTab);
             }
         });
     });
@@ -175,25 +205,26 @@ function updateDashboard() {
         dashboardDateEl.textContent = formatDate(currentDate);
     }
     
-    // Update nutrition circles
-    updateNutritionCircle('calories', totals.calories, APP_CONFIG.dailyGoals.calories);
-    updateNutritionCircle('protein', totals.protein, APP_CONFIG.dailyGoals.protein);
-    updateNutritionCircle('carbs', totals.carbs, APP_CONFIG.dailyGoals.carbs);
-    updateNutritionCircle('fat', totals.fat, APP_CONFIG.dailyGoals.fat);
-    updateNutritionCircle('fiber', totals.fiber, APP_CONFIG.dailyGoals.fiber);
+    // Update nutrition progress bars
+    updateProgressBar('calories', totals.calories, APP_CONFIG.dailyGoals.calories);
+    updateProgressBar('protein', totals.protein, APP_CONFIG.dailyGoals.protein);
+    updateProgressBar('carbs', totals.carbs, APP_CONFIG.dailyGoals.carbs);
+    updateProgressBar('fat', totals.fat, APP_CONFIG.dailyGoals.fat);
+    updateProgressBar('fiber', totals.fiber, APP_CONFIG.dailyGoals.fiber);
 }
 
-function updateNutritionCircle(nutrient, current, goal) {
-    const circle = document.getElementById(`${nutrient}-circle`);
+function updateProgressBar(nutrient, current, goal) {
+    const progressBar = document.getElementById(`${nutrient}-progress`);
     const valueEl = document.getElementById(`${nutrient}-value`);
     
-    if (!circle || !valueEl) return;
+    if (!progressBar || !valueEl) {
+        console.warn(`Progress elements not found for ${nutrient}`);
+        return;
+    }
     
     const percentage = Math.min((current / goal) * 100, 100);
-    const circumference = 283; // 2 * π * 45
-    const offset = circumference - (percentage / 100) * circumference;
     
-    circle.style.strokeDashoffset = offset;
+    progressBar.style.width = `${percentage}%`;
     valueEl.textContent = Math.round(current);
 }
 
@@ -201,11 +232,14 @@ function initializeDashboardDateNavigation() {
     const prevBtn = document.getElementById('prev-date-dashboard');
     const nextBtn = document.getElementById('next-date-dashboard');
     
+    console.log('Dashboard date nav buttons:', { prev: !!prevBtn, next: !!nextBtn });
+    
     if (prevBtn) {
         prevBtn.addEventListener('click', (e) => {
             e.preventDefault();
             currentDate.setDate(currentDate.getDate() - 1);
             updateDashboard();
+            console.log('Dashboard date changed to:', formatDate(currentDate));
         });
     }
     
@@ -214,6 +248,7 @@ function initializeDashboardDateNavigation() {
             e.preventDefault();
             currentDate.setDate(currentDate.getDate() + 1);
             updateDashboard();
+            console.log('Dashboard date changed to:', formatDate(currentDate));
         });
     }
 }
@@ -301,12 +336,15 @@ function initializeDailyLogDateNavigation() {
     const prevBtn = document.getElementById('prev-date-log');
     const nextBtn = document.getElementById('next-date-log');
     
+    console.log('Daily log date nav buttons:', { prev: !!prevBtn, next: !!nextBtn });
+    
     if (prevBtn) {
         prevBtn.addEventListener('click', (e) => {
             e.preventDefault();
             currentDate.setDate(currentDate.getDate() - 1);
             updateDailyLog();
             updateDashboard();
+            console.log('Daily log date changed to:', formatDate(currentDate));
         });
     }
     
@@ -316,6 +354,7 @@ function initializeDailyLogDateNavigation() {
             currentDate.setDate(currentDate.getDate() + 1);
             updateDailyLog();
             updateDashboard();
+            console.log('Daily log date changed to:', formatDate(currentDate));
         });
     }
 }
@@ -323,7 +362,10 @@ function initializeDailyLogDateNavigation() {
 // Progress Chart Functions
 function updateProgressChart() {
     const canvas = document.getElementById('progress-chart');
-    if (!canvas) return;
+    if (!canvas) {
+        console.warn('Progress chart canvas not found');
+        return;
+    }
     
     const ctx = canvas.getContext('2d');
     
@@ -341,24 +383,24 @@ function updateProgressChart() {
                 {
                     label: 'Calories',
                     data: chartData.calories,
-                    backgroundColor: APP_CONFIG.chartColors.calories + '80',
-                    borderColor: APP_CONFIG.chartColors.calories,
+                    backgroundColor: '#1FB8CD',
+                    borderColor: '#1FB8CD',
                     borderWidth: 1,
                     yAxisID: 'y'
                 },
                 {
                     label: 'Protein (g)',
                     data: chartData.protein,
-                    backgroundColor: APP_CONFIG.chartColors.protein + '80',
-                    borderColor: APP_CONFIG.chartColors.protein,
+                    backgroundColor: '#B4413C',
+                    borderColor: '#B4413C',
                     borderWidth: 1,
                     yAxisID: 'y1'
                 },
                 {
                     label: 'Fiber (g)',
                     data: chartData.fiber,
-                    backgroundColor: APP_CONFIG.chartColors.fiber + '80',
-                    borderColor: APP_CONFIG.chartColors.fiber,
+                    backgroundColor: '#5D878F',
+                    borderColor: '#5D878F',
                     borderWidth: 1,
                     yAxisID: 'y1'
                 }
@@ -369,7 +411,7 @@ function updateProgressChart() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'top'
                 }
             },
             scales: {
@@ -392,7 +434,7 @@ function updateProgressChart() {
                     },
                     grid: {
                         drawOnChartArea: false,
-                    },
+                    }
                 }
             }
         }
@@ -449,13 +491,17 @@ function initializeProgressView() {
         btn.addEventListener('click', () => {
             viewBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            setTimeout(updateProgressChart, 100);
+            setTimeout(() => {
+                updateProgressChart();
+            }, 100);
         });
     });
 }
 
 // Modal Functions
 function initializeModal() {
+    console.log('Initializing modal...');
+    
     const modal = document.getElementById('add-meal-modal');
     const addMealBtn = document.getElementById('add-meal-btn');
     const closeBtn = document.getElementById('close-modal');
@@ -463,17 +509,28 @@ function initializeModal() {
     const backdrop = document.querySelector('.modal-backdrop');
     const form = document.getElementById('add-meal-form');
     
+    console.log('Modal elements found:', {
+        modal: !!modal,
+        addMealBtn: !!addMealBtn,
+        closeBtn: !!closeBtn,
+        cancelBtn: !!cancelBtn,
+        backdrop: !!backdrop,
+        form: !!form
+    });
+    
     if (!modal || !addMealBtn || !form) {
-        console.error('Modal elements not found');
+        console.error('Critical modal elements missing');
         return;
     }
     
     function openModal() {
+        console.log('Opening modal...');
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         
         // Populate with calculated nutrition if available
         if (calculatedNutrition) {
+            console.log('Populating with calculated nutrition:', calculatedNutrition);
             const caloriesEl = document.getElementById('meal-calories');
             const proteinEl = document.getElementById('meal-protein');
             const carbsEl = document.getElementById('meal-carbs');
@@ -491,36 +548,50 @@ function initializeModal() {
     }
     
     function closeModal() {
+        console.log('Closing modal...');
         modal.classList.add('hidden');
         document.body.style.overflow = '';
         form.reset();
     }
     
+    // Add meal button event listener
     addMealBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        console.log('Add meal button clicked');
         openModal();
     });
     
+    // Close button event listener
     if (closeBtn) {
         closeBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             closeModal();
         });
     }
     
+    // Cancel button event listener
     if (cancelBtn) {
         cancelBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             closeModal();
         });
     }
     
+    // Backdrop click event listener
     if (backdrop) {
-        backdrop.addEventListener('click', closeModal);
+        backdrop.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeModal();
+        });
     }
     
+    // Form submit event listener
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('Form submitted');
         
         const nameEl = document.getElementById('meal-name');
         const typeEl = document.getElementById('meal-type');
@@ -550,6 +621,7 @@ function initializeModal() {
             return;
         }
         
+        console.log('Adding meal:', mealData);
         addMeal(mealData);
         closeModal();
     });
@@ -557,11 +629,21 @@ function initializeModal() {
 
 // AI Calculator Functions
 function initializeAICalculator() {
+    console.log('Initializing AI Calculator...');
+    
     const calculateBtn = document.getElementById('calculate-nutrition-btn');
     const copyBtn = document.getElementById('copy-to-meal-btn');
     const ingredientsInput = document.getElementById('ingredients-input');
     const results = document.getElementById('calculator-results');
     const loading = document.getElementById('calculator-loading');
+    
+    console.log('AI Calculator elements:', {
+        calculateBtn: !!calculateBtn,
+        copyBtn: !!copyBtn,
+        ingredientsInput: !!ingredientsInput,
+        results: !!results,
+        loading: !!loading
+    });
     
     if (!calculateBtn || !ingredientsInput) {
         console.error('AI Calculator elements not found');
@@ -575,6 +657,8 @@ function initializeAICalculator() {
             alert('Please enter some ingredients');
             return;
         }
+        
+        console.log('Calculating nutrition for:', ingredients);
         
         // Show loading state
         if (results) results.classList.add('hidden');
@@ -606,6 +690,8 @@ function initializeAICalculator() {
     if (copyBtn) {
         copyBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            console.log('Copying to meal form...');
+            
             // Switch to dashboard and open modal
             const dashboardTab = document.querySelector('[data-tab="dashboard"]');
             if (dashboardTab) {
@@ -613,30 +699,13 @@ function initializeAICalculator() {
                 setTimeout(() => {
                     const addMealBtn = document.getElementById('add-meal-btn');
                     if (addMealBtn) addMealBtn.click();
-                }, 100);
+                }, 200);
             }
         });
     }
 }
 
 async function calculateNutrition(ingredients) {
-    // Try to call Netlify function first, with fallback
-    try {
-        const response = await fetch('/.netlify/functions/calculate-nutrition', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ingredients })
-        });
-        
-        if (response.ok) {
-            return await response.json();
-        }
-    } catch (error) {
-        console.log('Netlify function not available, using local calculation');
-    }
-    
     // Fallback calculation based on common ingredients
     return calculateNutritionLocally(ingredients);
 }
@@ -656,7 +725,10 @@ function calculateNutritionLocally(ingredients) {
         'banana': { calories: 89, protein: 1.1, carbs: 23, fat: 0.3, fiber: 2.6 },
         'apple': { calories: 52, protein: 0.3, carbs: 14, fat: 0.2, fiber: 2.4 },
         'yogurt': { calories: 59, protein: 10, carbs: 3.6, fat: 0.4, fiber: 0 },
-        'berries': { calories: 57, protein: 0.7, carbs: 14, fat: 0.3, fiber: 2.4 }
+        'berries': { calories: 57, protein: 0.7, carbs: 14, fat: 0.3, fiber: 2.4 },
+        'salmon': { calories: 208, protein: 25, carbs: 0, fat: 12, fiber: 0 },
+        'spinach': { calories: 23, protein: 2.9, carbs: 3.6, fat: 0.4, fiber: 2.2 },
+        'avocado': { calories: 160, protein: 2, carbs: 9, fat: 15, fiber: 7 }
     };
     
     lines.forEach(line => {
@@ -720,22 +792,30 @@ function displayNutritionResults(nutrition) {
 function initializeApp() {
     console.log('Initializing Yumyum app...');
     
-    // Initialize data
-    initializeData();
-    
-    // Initialize UI components
-    initializeNavigation();
-    initializeDashboardDateNavigation();
-    initializeDailyLogDateNavigation();
-    initializeModal();
-    initializeAICalculator();
-    initializeProgressView();
-    
-    // Initial updates
-    updateDashboard();
-    updateDailyLog();
-    
-    console.log('Yumyum app initialized successfully!');
+    try {
+        // Initialize data first
+        initializeData();
+        
+        // Wait for DOM to be fully loaded
+        setTimeout(() => {
+            // Initialize UI components
+            initializeNavigation();
+            initializeDashboardDateNavigation();
+            initializeDailyLogDateNavigation();
+            initializeModal();
+            initializeAICalculator();
+            initializeProgressView();
+            
+            // Initial updates
+            updateDashboard();
+            updateDailyLog();
+            
+            console.log('Yumyum app initialized successfully!');
+        }, 100);
+        
+    } catch (error) {
+        console.error('Error initializing app:', error);
+    }
 }
 
 // Start the application when DOM is ready

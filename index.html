@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yumyum - Nutrition Tracker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -16,7 +13,6 @@
         <header class="nav-header">
             <div class="container">
                 <div class="nav-brand">
-                    <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5878a9a8-5fc3-47a8-956b-ed37d5e57f98.png" alt="Yumyum Logo" class="logo">
                     <span class="brand-name">Yumyum</span>
                 </div>
                 <nav class="nav-tabs">
@@ -43,83 +39,73 @@
                     
                     <div class="nutrition-grid">
                         <div class="nutrition-card" data-nutrient="calories">
-                            <div class="nutrition-circle">
-                                <svg viewBox="0 0 100 100">
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-teal-500)" stroke-width="4" fill="none" 
-                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="calories-circle"/>
-                                </svg>
-                                <div class="nutrition-text">
-                                    <span class="nutrition-value" id="calories-value">0</span>
-                                    <span class="nutrition-unit">kcal</span>
-                                    <span class="nutrition-goal">/ 1500</span>
+                            <h3>Calories</h3>
+                            <div class="nutrition-info">
+                                <span class="nutrition-value" id="calories-value">0</span>
+                                <span class="nutrition-unit">kcal</span>
+                                <span class="nutrition-goal">/ 1500</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill calories-progress" id="calories-progress"></div>
                                 </div>
                             </div>
-                            <h3>Calories</h3>
                         </div>
 
                         <div class="nutrition-card" data-nutrient="protein">
-                            <div class="nutrition-circle">
-                                <svg viewBox="0 0 100 100">
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-red-500)" stroke-width="4" fill="none" 
-                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="protein-circle"/>
-                                </svg>
-                                <div class="nutrition-text">
-                                    <span class="nutrition-value" id="protein-value">0</span>
-                                    <span class="nutrition-unit">g</span>
-                                    <span class="nutrition-goal">/ 80</span>
+                            <h3>Protein</h3>
+                            <div class="nutrition-info">
+                                <span class="nutrition-value" id="protein-value">0</span>
+                                <span class="nutrition-unit">g</span>
+                                <span class="nutrition-goal">/ 80</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill protein-progress" id="protein-progress"></div>
                                 </div>
                             </div>
-                            <h3>Protein</h3>
                         </div>
 
                         <div class="nutrition-card" data-nutrient="carbs">
-                            <div class="nutrition-circle">
-                                <svg viewBox="0 0 100 100">
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-orange-500)" stroke-width="4" fill="none" 
-                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="carbs-circle"/>
-                                </svg>
-                                <div class="nutrition-text">
-                                    <span class="nutrition-value" id="carbs-value">0</span>
-                                    <span class="nutrition-unit">g</span>
-                                    <span class="nutrition-goal">/ 201</span>
+                            <h3>Carbs</h3>
+                            <div class="nutrition-info">
+                                <span class="nutrition-value" id="carbs-value">0</span>
+                                <span class="nutrition-unit">g</span>
+                                <span class="nutrition-goal">/ 201</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill carbs-progress" id="carbs-progress"></div>
                                 </div>
                             </div>
-                            <h3>Carbs</h3>
                         </div>
 
                         <div class="nutrition-card" data-nutrient="fat">
-                            <div class="nutrition-circle">
-                                <svg viewBox="0 0 100 100">
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-slate-500)" stroke-width="4" fill="none" 
-                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="fat-circle"/>
-                                </svg>
-                                <div class="nutrition-text">
-                                    <span class="nutrition-value" id="fat-value">0</span>
-                                    <span class="nutrition-unit">g</span>
-                                    <span class="nutrition-goal">/ 42</span>
+                            <h3>Fat</h3>
+                            <div class="nutrition-info">
+                                <span class="nutrition-value" id="fat-value">0</span>
+                                <span class="nutrition-unit">g</span>
+                                <span class="nutrition-goal">/ 42</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill fat-progress" id="fat-progress"></div>
                                 </div>
                             </div>
-                            <h3>Fat</h3>
                         </div>
 
                         <div class="nutrition-card" data-nutrient="fiber">
-                            <div class="nutrition-circle">
-                                <svg viewBox="0 0 100 100">
-                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
-                                    <circle cx="50" cy="50" r="45" stroke="#10B981" stroke-width="4" fill="none" 
-                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="fiber-circle"/>
-                                </svg>
-                                <div class="nutrition-text">
-                                    <span class="nutrition-value" id="fiber-value">0</span>
-                                    <span class="nutrition-unit">g</span>
-                                    <span class="nutrition-goal">/ 25</span>
+                            <h3>Fiber</h3>
+                            <div class="nutrition-info">
+                                <span class="nutrition-value" id="fiber-value">0</span>
+                                <span class="nutrition-unit">g</span>
+                                <span class="nutrition-goal">/ 25</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill fiber-progress" id="fiber-progress"></div>
                                 </div>
                             </div>
-                            <h3>Fiber</h3>
                         </div>
                     </div>
 
