@@ -4,238 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yumyum - Nutrition Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <h1 class="app-title">Yumyum</h1>
-        </div>
-    </header>
-
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="container">
-            <div class="nav-tabs">
-                <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
-                <button class="nav-tab" data-tab="progress">Progress</button>
-                <button class="nav-tab" data-tab="log">Daily Log</button>
-                <button class="nav-tab" data-tab="calculator">AI Calculator</button>
+    <div class="app">
+        <!-- Navigation Header -->
+        <header class="nav-header">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/5878a9a8-5fc3-47a8-956b-ed37d5e57f98.png" alt="Yumyum Logo" class="logo">
+                    <span class="brand-name">Yumyum</span>
+                </div>
+                <nav class="nav-tabs">
+                    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+                    <button class="nav-tab" data-tab="daily-log">Daily Log</button>
+                    <button class="nav-tab" data-tab="progress">Progress</button>
+                    <button class="nav-tab" data-tab="ai-calculator">AI Calculator</button>
+                </nav>
             </div>
-        </div>
-    </nav>
+        </header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container">
+        <main class="main-content">
             <!-- Dashboard Section -->
-            <section id="dashboard" class="section active">
-                <h2 class="section-title">Today's Overview</h2>
-                <div class="nutrition-grid">
-                    <div class="nutrition-card">
-                        <h3>Calories</h3>
-                        <div class="nutrition-value">
-                            <span class="current" id="calories-current">0</span>
-                            <span class="goal">/ 1500</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="calories-progress"></div>
+            <section class="tab-content active" id="dashboard">
+                <div class="container">
+                    <div class="section-header">
+                        <h1>Today's Nutrition</h1>
+                        <div class="date-navigation">
+                            <button class="btn btn--outline btn--sm" id="prev-date-dashboard">‹</button>
+                            <span class="current-date" id="current-date-dashboard"></span>
+                            <button class="btn btn--outline btn--sm" id="next-date-dashboard">›</button>
                         </div>
                     </div>
-                    <div class="nutrition-card">
-                        <h3>Protein</h3>
-                        <div class="nutrition-value">
-                            <span class="current" id="protein-current">0</span>
-                            <span class="goal">/ 80g</span>
+                    
+                    <div class="nutrition-grid">
+                        <div class="nutrition-card" data-nutrient="calories">
+                            <div class="nutrition-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-teal-500)" stroke-width="4" fill="none" 
+                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="calories-circle"/>
+                                </svg>
+                                <div class="nutrition-text">
+                                    <span class="nutrition-value" id="calories-value">0</span>
+                                    <span class="nutrition-unit">kcal</span>
+                                    <span class="nutrition-goal">/ 1500</span>
+                                </div>
+                            </div>
+                            <h3>Calories</h3>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="protein-progress"></div>
-                        </div>
-                    </div>
-                    <div class="nutrition-card">
-                        <h3>Carbs</h3>
-                        <div class="nutrition-value">
-                            <span class="current" id="carbs-current">0</span>
-                            <span class="goal">/ 201g</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="carbs-progress"></div>
-                        </div>
-                    </div>
-                    <div class="nutrition-card">
-                        <h3>Fat</h3>
-                        <div class="nutrition-value">
-                            <span class="current" id="fat-current">0</span>
-                            <span class="goal">/ 42g</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="fat-progress"></div>
-                        </div>
-                    </div>
-                    <div class="nutrition-card">
-                        <h3>Fiber</h3>
-                        <div class="nutrition-value">
-                            <span class="current" id="fiber-current">0</span>
-                            <span class="goal">/ 25g</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="fiber-progress"></div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="add-meal-section">
-                    <button class="btn btn--primary btn--full-width" id="add-meal-btn">Add Meal</button>
-                </div>
-            </section>
+                        <div class="nutrition-card" data-nutrient="protein">
+                            <div class="nutrition-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-red-500)" stroke-width="4" fill="none" 
+                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="protein-circle"/>
+                                </svg>
+                                <div class="nutrition-text">
+                                    <span class="nutrition-value" id="protein-value">0</span>
+                                    <span class="nutrition-unit">g</span>
+                                    <span class="nutrition-goal">/ 80</span>
+                                </div>
+                            </div>
+                            <h3>Protein</h3>
+                        </div>
 
-            <!-- Progress Section -->
-            <section id="progress" class="section">
-                <h2 class="section-title">Progress Overview</h2>
-                <div class="chart-container" style="position: relative; height: 400px;">
-                    <canvas id="progress-chart"></canvas>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Avg Calories</h3>
-                        <div class="stat-value" id="avg-calories">0</div>
+                        <div class="nutrition-card" data-nutrient="carbs">
+                            <div class="nutrition-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-orange-500)" stroke-width="4" fill="none" 
+                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="carbs-circle"/>
+                                </svg>
+                                <div class="nutrition-text">
+                                    <span class="nutrition-value" id="carbs-value">0</span>
+                                    <span class="nutrition-unit">g</span>
+                                    <span class="nutrition-goal">/ 201</span>
+                                </div>
+                            </div>
+                            <h3>Carbs</h3>
+                        </div>
+
+                        <div class="nutrition-card" data-nutrient="fat">
+                            <div class="nutrition-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-slate-500)" stroke-width="4" fill="none" 
+                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="fat-circle"/>
+                                </svg>
+                                <div class="nutrition-text">
+                                    <span class="nutrition-value" id="fat-value">0</span>
+                                    <span class="nutrition-unit">g</span>
+                                    <span class="nutrition-goal">/ 42</span>
+                                </div>
+                            </div>
+                            <h3>Fat</h3>
+                        </div>
+
+                        <div class="nutrition-card" data-nutrient="fiber">
+                            <div class="nutrition-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" stroke="var(--color-border)" stroke-width="4" fill="none"/>
+                                    <circle cx="50" cy="50" r="45" stroke="#10B981" stroke-width="4" fill="none" 
+                                            stroke-dasharray="283" stroke-dashoffset="283" class="progress-circle" id="fiber-circle"/>
+                                </svg>
+                                <div class="nutrition-text">
+                                    <span class="nutrition-value" id="fiber-value">0</span>
+                                    <span class="nutrition-unit">g</span>
+                                    <span class="nutrition-goal">/ 25</span>
+                                </div>
+                            </div>
+                            <h3>Fiber</h3>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3>Avg Protein</h3>
-                        <div class="stat-value" id="avg-protein">0g</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Avg Fiber</h3>
-                        <div class="stat-value" id="avg-fiber">0g</div>
+
+                    <div class="add-meal-section">
+                        <button class="btn btn--primary btn--lg" id="add-meal-btn">+ Add Meal</button>
                     </div>
                 </div>
             </section>
 
             <!-- Daily Log Section -->
-            <section id="log" class="section">
-                <div class="log-header">
-                    <h2 class="section-title">Daily Log</h2>
-                    <div class="date-navigation">
-                        <button class="btn btn--outline btn--sm" id="prev-date">◀</button>
-                        <span class="current-date" id="current-date">Aug 07, 2025</span>
-                        <button class="btn btn--outline btn--sm" id="next-date">▶</button>
+            <section class="tab-content" id="daily-log">
+                <div class="container">
+                    <div class="section-header">
+                        <h1>Daily Log</h1>
+                        <div class="date-navigation">
+                            <button class="btn btn--outline btn--sm" id="prev-date-log">‹</button>
+                            <span class="current-date" id="current-date-log"></span>
+                            <button class="btn btn--outline btn--sm" id="next-date-log">›</button>
+                        </div>
+                    </div>
+
+                    <div class="meals-container">
+                        <div class="meal-section" data-type="breakfast">
+                            <h2>Breakfast</h2>
+                            <div class="meals-list" id="breakfast-meals"></div>
+                        </div>
+                        
+                        <div class="meal-section" data-type="lunch">
+                            <h2>Lunch</h2>
+                            <div class="meals-list" id="lunch-meals"></div>
+                        </div>
+                        
+                        <div class="meal-section" data-type="dinner">
+                            <h2>Dinner</h2>
+                            <div class="meals-list" id="dinner-meals"></div>
+                        </div>
+                        
+                        <div class="meal-section" data-type="snack">
+                            <h2>Snacks</h2>
+                            <div class="meals-list" id="snack-meals"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="meals-list" id="meals-list">
-                    <!-- Meals will be populated by JavaScript -->
+            </section>
+
+            <!-- Progress Section -->
+            <section class="tab-content" id="progress">
+                <div class="container">
+                    <div class="section-header">
+                        <h1>Progress Overview</h1>
+                        <div class="view-options">
+                            <button class="btn btn--outline btn--sm view-btn active" data-view="weekly">Weekly</button>
+                            <button class="btn btn--outline btn--sm view-btn" data-view="monthly">Monthly</button>
+                        </div>
+                    </div>
+
+                    <div class="chart-container" style="position: relative; height: 400px;">
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-calories">0</div>
+                            <div class="stat-label">Avg Calories</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-protein">0</div>
+                            <div class="stat-label">Avg Protein (g)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-fiber">0</div>
+                            <div class="stat-label">Avg Fiber (g)</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- AI Calculator Section -->
-            <section id="calculator" class="section">
-                <h2 class="section-title">AI Nutrition Calculator</h2>
-                <p class="section-subtitle">Enter your recipe ingredients to get nutritional values</p>
-                
-                <div class="calculator-container">
+            <section class="tab-content" id="ai-calculator">
+                <div class="container">
+                    <div class="section-header">
+                        <h1>AI Nutrition Calculator</h1>
+                        <p>Enter ingredients and get nutritional information calculated automatically</p>
+                    </div>
+
                     <div class="calculator-form">
                         <div class="form-group">
-                            <label for="ingredients-input" class="form-label">Recipe Ingredients</label>
-                            <textarea 
-                                id="ingredients-input" 
-                                class="form-control ingredients-textarea" 
-                                placeholder="Enter ingredients with quantities, e.g.:&#10;200g chicken breast&#10;1 cup brown rice&#10;2 tbsp olive oil&#10;100g broccoli"
-                                rows="8"
-                            ></textarea>
+                            <label class="form-label" for="ingredients-input">Ingredients</label>
+                            <textarea class="form-control" id="ingredients-input" rows="6" 
+                                placeholder="Enter ingredients, e.g.:&#10;- 2 slices whole wheat bread&#10;- 3 oz grilled chicken breast&#10;- 1 tbsp olive oil&#10;- 1 cup mixed greens"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="servings-input" class="form-label">Number of Servings</label>
-                            <input type="number" id="servings-input" class="form-control" value="1" min="1" max="20">
-                        </div>
-                        <button class="btn btn--primary" id="calculate-btn">Calculate Nutrition</button>
+                        <button class="btn btn--primary btn--lg" id="calculate-nutrition-btn">Calculate Nutrition</button>
                     </div>
 
                     <div class="calculator-results hidden" id="calculator-results">
-                        <h3>Calculated Nutrition (Per Serving)</h3>
-                        <div class="results-grid">
-                            <div class="result-card">
-                                <h4>Calories</h4>
-                                <div class="result-value" id="calc-calories">0</div>
+                        <h2>Nutritional Information</h2>
+                        <div class="nutrition-results">
+                            <div class="result-item">
+                                <span class="result-label">Calories:</span>
+                                <span class="result-value" id="calc-calories">0</span>
                             </div>
-                            <div class="result-card">
-                                <h4>Protein</h4>
-                                <div class="result-value" id="calc-protein">0g</div>
+                            <div class="result-item">
+                                <span class="result-label">Protein:</span>
+                                <span class="result-value" id="calc-protein">0g</span>
                             </div>
-                            <div class="result-card">
-                                <h4>Carbs</h4>
-                                <div class="result-value" id="calc-carbs">0g</div>
+                            <div class="result-item">
+                                <span class="result-label">Carbs:</span>
+                                <span class="result-value" id="calc-carbs">0g</span>
                             </div>
-                            <div class="result-card">
-                                <h4>Fat</h4>
-                                <div class="result-value" id="calc-fat">0g</div>
+                            <div class="result-item">
+                                <span class="result-label">Fat:</span>
+                                <span class="result-value" id="calc-fat">0g</span>
                             </div>
-                            <div class="result-card">
-                                <h4>Fiber</h4>
-                                <div class="result-value" id="calc-fiber">0g</div>
+                            <div class="result-item">
+                                <span class="result-label">Fiber:</span>
+                                <span class="result-value" id="calc-fiber">0g</span>
                             </div>
                         </div>
-                        <div class="parsing-info" id="parsing-info">
-                            <h4>Recognized Ingredients:</h4>
-                            <ul id="recognized-ingredients"></ul>
-                        </div>
-                        <button class="btn btn--secondary" id="copy-to-meal-btn">Copy to Add Meal</button>
+                        <button class="btn btn--secondary btn--lg" id="copy-to-meal-btn">Copy to Add Meal</button>
+                    </div>
+
+                    <div class="calculator-loading hidden" id="calculator-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Calculating nutrition...</p>
                     </div>
                 </div>
             </section>
-        </div>
-    </main>
+        </main>
 
-    <!-- Add Meal Modal -->
-    <div class="modal hidden" id="add-meal-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Meal</h3>
-                <button class="modal-close" id="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="add-meal-form">
+        <!-- Add Meal Modal -->
+        <div class="modal hidden" id="add-meal-modal">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Meal</h2>
+                    <button class="modal-close" id="close-modal">&times;</button>
+                </div>
+                <form class="modal-body" id="add-meal-form">
                     <div class="form-group">
-                        <label for="meal-name" class="form-label">Meal Name</label>
-                        <input type="text" id="meal-name" class="form-control" required>
+                        <label class="form-label" for="meal-name">Meal Name</label>
+                        <input type="text" class="form-control" id="meal-name" required>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="meal-type" class="form-label">Meal Type</label>
-                        <select id="meal-type" class="form-control" required>
-                            <option value="">Select meal type</option>
+                        <label class="form-label" for="meal-type">Meal Type</label>
+                        <select class="form-control" id="meal-type" required>
                             <option value="breakfast">Breakfast</option>
                             <option value="lunch">Lunch</option>
                             <option value="dinner">Dinner</option>
                             <option value="snack">Snack</option>
                         </select>
                     </div>
-                    <div class="form-row">
+                    
+                    <div class="nutrition-inputs">
                         <div class="form-group">
-                            <label for="meal-calories" class="form-label">Calories</label>
-                            <input type="number" id="meal-calories" class="form-control" required>
+                            <label class="form-label" for="meal-calories">Calories</label>
+                            <input type="number" class="form-control" id="meal-calories" min="0" required>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="meal-protein" class="form-label">Protein (g)</label>
-                            <input type="number" id="meal-protein" class="form-control" required>
+                            <label class="form-label" for="meal-protein">Protein (g)</label>
+                            <input type="number" class="form-control" id="meal-protein" min="0" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="meal-carbs">Carbs (g)</label>
+                            <input type="number" class="form-control" id="meal-carbs" min="0" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="meal-fat">Fat (g)</label>
+                            <input type="number" class="form-control" id="meal-fat" min="0" step="0.1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="meal-fiber">Fiber (g)</label>
+                            <input type="number" class="form-control" id="meal-fiber" min="0" step="0.1" required>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="meal-carbs" class="form-label">Carbs (g)</label>
-                            <input type="number" id="meal-carbs" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="meal-fat" class="form-label">Fat (g)</label>
-                            <input type="number" id="meal-fat" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="meal-fiber" class="form-label">Fiber (g)</label>
-                        <input type="number" id="meal-fiber" class="form-control" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn--outline" id="cancel-btn">Cancel</button>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--outline" id="cancel-meal">Cancel</button>
                         <button type="submit" class="btn btn--primary">Add Meal</button>
                     </div>
                 </form>
